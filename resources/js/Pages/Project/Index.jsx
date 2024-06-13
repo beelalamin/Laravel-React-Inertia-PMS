@@ -6,8 +6,9 @@ import { PROJECT_STATUS_CLASS_MAP, PROJECT_STATUS_TEXT_MAP } from "../Constant";
 import SelectInput from "@/Components/SelectInput";
 import TextInput from "@/Components/TextInput";
 import TableHeading from "@/Components/TableHeading";
+import Toast from "@/Components/Toast";
 
-export default function index({ auth, projects, queryParams = null }) {
+export default function index({ auth, projects, queryParams = null, message }) {
   queryParams = queryParams || {};
 
   const searchField = (name, value) => {
@@ -46,12 +47,22 @@ export default function index({ auth, projects, queryParams = null }) {
       <Authenticatedlayout
         user={auth.user}
         header={
-          <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            Projects
-          </h2>
+          <div className="flex items-center justify-between">
+            <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+              Projects
+            </h2>
+            <Link
+              href={route("project.create")}
+              className="bg-emerald-500 text-sm py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600"
+            >
+              Create New
+            </Link>
+          </div>
         }
       >
         <Head title="Projects" />
+
+        {<Toast message={message} type={"success"} show={true} />}
 
         <div className="py-12">
           <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -143,8 +154,10 @@ export default function index({ auth, projects, queryParams = null }) {
                           <td className="px-3 py-2">
                             <img src={project.image_path} alt="" />
                           </td>
-                          <td className="px-3 py-2 text-wrap w-80">
-                            {project.name}
+                          <td className="px-3 py-2 text-wrap w-80 hover:underline hover:text-gray-300 ">
+                            <Link href={route("project.show", project.id)}>
+                              {project.name}
+                            </Link>
                           </td>
                           <td className="px-3 py-2 text-xs">
                             <span
