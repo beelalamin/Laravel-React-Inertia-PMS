@@ -5,21 +5,22 @@ import TextAreaInput from "@/Components/TextAreaInput";
 import TextInput from "@/Components/TextInput";
 import Authenticated from "@/Layouts/AuthenticatedLayout";
 import { Head, Link, useForm } from "@inertiajs/react";
-import React from "react";
+import React, { useEffect } from "react";
 
-export default function Create({ auth, header }) {
-  const { data, setData, post, processing, errors, reset } = useForm({
+export default function Edit({ auth, project }) {
+  const { data, setData, post, errors, reset } = useForm({
     image: "",
-    image_path: "",
-    name: "",
-    status: "",
-    description: "",
-    due_date: "",
+    name: project.name || "",
+    status: project.status || "",
+    description: project.description || "",
+    due_date: project.due_date || "",
+    _method: "PUT",
   });
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    post(route("project.store"));
+
+    post(route("project.update", project.id));
   };
   return (
     <Authenticated
@@ -27,16 +28,23 @@ export default function Create({ auth, header }) {
       header={
         <div className="flex items-center justify-between">
           <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            Create New Project
+            Edit {project.name}
           </h2>
         </div>
       }
     >
-      <Head title="Create New Project" />
+      <Head title="Edit Project" />
 
       <div className="py-12">
         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
           <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+            <div>
+              <img
+                src={project.image_path}
+                alt=""
+                className="w-full h-64 object-cover"
+              />
+            </div>
             <form
               className="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow-sm sm:rounded-lg"
               onSubmit={handleSubmit}
@@ -142,7 +150,7 @@ export default function Create({ auth, header }) {
                   href={route("project.index")}
                   className="bg-emerald-500 py-2 px-4 text-xs text-white rounded shadow transition-all hover:bg-emerald-600 mr-2"
                 >
-                  Create
+                  Update
                 </button>
               </div>
             </form>

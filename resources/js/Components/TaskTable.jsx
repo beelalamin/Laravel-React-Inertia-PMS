@@ -44,6 +44,15 @@ export default function TaskTable({
     router.get(route("task.index"), queryParams);
   };
 
+  const handleDelete = (id) => {
+    const confirm = window.confirm("Are you sure?");
+
+    if (!confirm) {
+      return;
+    }
+    router.delete(route("task.destroy", id));
+  };
+
   return (
     <div>
       <div className="overflow-auto">
@@ -57,15 +66,16 @@ export default function TaskTable({
                 sortField={sortField}
               />
               <th className="px-3 py-2 w-10">Image</th>
-              {!hideProjectCol && (
-                <th className="px-3 py-2 w-10">Project Name</th>
-              )}
+
               <TableHeading
-                name="Name"
+                name="Task Name"
                 sort_field={queryParams.sort_field}
                 sort_direction={queryParams.sort_direction}
                 sortField={sortField}
               />
+              {!hideProjectCol && (
+                <th className="px-3 py-2 w-10">Project Name</th>
+              )}
               <TableHeading
                 name="Status"
                 sort_field={queryParams.sort_field}
@@ -164,15 +174,15 @@ export default function TaskTable({
                     >
                       Edit
                     </Link>
-                    <Link
-                      href={route("task.destroy", task.id)}
+                    <button
+                      onClick={(e) => handleDelete(task.id)}
                       className="font-medium
                                                         text-red-600
                                                         dark:text-red-500
                                                         hover:underline mx-1"
                     >
                       Delete
-                    </Link>
+                    </button>
                   </td>
                 </tr>
               ))}

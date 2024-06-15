@@ -2,13 +2,11 @@ import Pagination from "@/Components/Pagination";
 import Authenticatedlayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link, router } from "@inertiajs/react";
 import React from "react";
-import { PROJECT_STATUS_CLASS_MAP, PROJECT_STATUS_TEXT_MAP } from "../Constant";
-import SelectInput from "@/Components/SelectInput";
 import TextInput from "@/Components/TextInput";
 import TableHeading from "@/Components/TableHeading";
-import Toast from "@/Components/Toast";
+import Toast from "@/Components/Toast"
 
-export default function index({ auth, projects, queryParams = null, message }) {
+export default function index({ auth, users, queryParams = null, message }) {
   queryParams = queryParams || {};
 
   const searchField = (name, value) => {
@@ -18,7 +16,7 @@ export default function index({ auth, projects, queryParams = null, message }) {
       delete queryParams[name];
     }
 
-    router.get(route("project.index"), queryParams);
+    router.get(route("user.index"), queryParams);
   };
 
   const onKeyPress = (name, e) => {
@@ -39,15 +37,15 @@ export default function index({ auth, projects, queryParams = null, message }) {
       queryParams.sort_direction = "asc";
     }
 
-    router.get(route("project.index"), queryParams);
+    router.get(route("user.index"), queryParams);
   };
 
-  const handleDelete = (project) => {
+  const handleDelete = (user) => {
     const confirm = window.confirm("Are you sure?");
     if (!confirm) {
       return;
     }
-    router.delete(route("project.destroy", project.id));
+    router.delete(route("user.destroy", user.id));
   };
 
   return (
@@ -57,10 +55,10 @@ export default function index({ auth, projects, queryParams = null, message }) {
         header={
           <div className="flex items-center justify-between">
             <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-              Projects
+              Users
             </h2>
             <Link
-              href={route("project.create")}
+              href={route("user.create")}
               className="bg-emerald-500 text-sm py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600"
             >
               Create New
@@ -68,7 +66,7 @@ export default function index({ auth, projects, queryParams = null, message }) {
           </div>
         }
       >
-        <Head title="Projects" />
+        <Head title="Users" />
 
         {message && <Toast message={message} type={"success"} show={message} />}
 
@@ -86,7 +84,6 @@ export default function index({ auth, projects, queryParams = null, message }) {
                           sort_direction={queryParams.sort_direction}
                           sortField={sortField}
                         />
-                        <th className="px-3 py-2 w-10">Image</th>
                         <TableHeading
                           name="Name"
                           sort_field={queryParams.sort_field}
@@ -94,7 +91,7 @@ export default function index({ auth, projects, queryParams = null, message }) {
                           sortField={sortField}
                         />
                         <TableHeading
-                          name="Status"
+                          name="email"
                           sort_field={queryParams.sort_field}
                           sort_direction={queryParams.sort_direction}
                           sortField={sortField}
@@ -107,13 +104,6 @@ export default function index({ auth, projects, queryParams = null, message }) {
                           sortField={sortField}
                         />
 
-                        <TableHeading
-                          name="Due Date"
-                          sort_field={queryParams.sort_field}
-                          sort_direction={queryParams.sort_direction}
-                          sortField={sortField}
-                        />
-                        <th className="px-3 py-2">Created By</th>
                         <th className="px-3 py-2">Actions</th>
                       </tr>
                     </thead>
@@ -121,70 +111,47 @@ export default function index({ auth, projects, queryParams = null, message }) {
                     <thead className="text-sm text-gray-700 dark:text-gray-400 border-b-2 border-gray-500">
                       <tr className="border-gray-500">
                         <th className="px-3 py-2"></th>
-                        <th className="px-3 py-2 w-10"></th>
                         <th className="px-3 py-2">
                           <TextInput
                             className="w-full text-xs"
                             defaultValue={queryParams.name}
-                            placeholder="Search by Project Title"
+                            placeholder="Search by User Name"
                             onBlur={(e) => searchField("name", e.target.value)}
                             onKeyPress={(e) => onKeyPress("name", e)}
                           />
                         </th>
                         <th className="px-3 py-2">
-                          <SelectInput
+                          <TextInput
                             className="w-full text-xs"
-                            defaultValue={queryParams.status}
+                            type="email"
+                            placeholder="Search by User Email"
+                            defaultValue={queryParams.email}
                             onChange={(e) =>
-                              searchField("status", e.target.value)
+                              searchField("email", e.target.value)
                             }
-                          >
-                            <option value="">Select Status</option>
-                            <option value="pending">Pending</option>
-                            <option value="in_progress">In Progress</option>
-                            <option value="completed">Completed</option>
-                          </SelectInput>
+                          />
                         </th>
-                        <th className="px-3 py-2"></th>
-                        <th className="px-3 py-2"></th>
                         <th className="px-3 py-2"></th>
                         <th className="px-3 py-2"></th>
                       </tr>
                     </thead>
 
                     <tbody>
-                      {projects.data.map((project) => (
+                      {users.data.map((user) => (
                         <tr
-                          key={project.id}
+                          key={user.id}
                           className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
                         >
-                          <td className="px-3 py-2">{project.id}</td>
-                          <td className="px-3 py-2">
-                            <img src={project.image_path} alt="" />
+                          <td className="px-3 py-2">{user.id}</td>
+
+                          <td className="px-3 py-2 text-wrap w-80  ">
+                            {user.name}
                           </td>
-                          <td className="px-3 py-2 text-wrap w-80 hover:underline hover:text-gray-300 ">
-                            <Link href={route("project.show", project.id)}>
-                              {project.name}
-                            </Link>
-                          </td>
-                          <td className="px-3 py-2 text-xs">
-                            <span
-                              className={
-                                "px-2 py-1 rounded text-white " +
-                                PROJECT_STATUS_CLASS_MAP[project.status]
-                              }
-                            >
-                              {PROJECT_STATUS_TEXT_MAP[project.status]}
-                            </span>
-                          </td>
-                          <td className="px-3 py-2">{project.due_date}</td>
-                          <td className="px-3 py-2">{project.created_at}</td>
-                          <td className="px-3 py-2">
-                            {project.createdBy.name}
-                          </td>
+                          <td className="px-3 py-2 text-xs">{user.email}</td>
+                          <td className="px-3 py-2">{user.created_at}</td>
                           <td className="px-3 py-2 ">
                             <Link
-                              href={route("project.edit", project.id)}
+                              href={route("user.edit", user.id)}
                               className="font-medium
                             text-blue-600
                             dark:text-blue-500
@@ -194,7 +161,7 @@ export default function index({ auth, projects, queryParams = null, message }) {
                             </Link>
                             <button
                               className="font-medium text-red-600 dark:text-red-500 hover:underline mx-1"
-                              onClick={(e) => handleDelete(project)}
+                              onClick={(e) => handleDelete(user)}
                             >
                               Delete
                             </button>
@@ -204,7 +171,7 @@ export default function index({ auth, projects, queryParams = null, message }) {
                     </tbody>
                   </table>
                 </div>
-                <Pagination links={projects.meta.links} />
+                <Pagination links={users.meta.links} />
               </div>
             </div>
           </div>
