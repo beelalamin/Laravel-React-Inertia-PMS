@@ -2,10 +2,13 @@ import Authenticatedlayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link } from "@inertiajs/react";
 import React from "react";
 import TaskTable from "@/Components/TaskTable";
+import Toast from "@/Components/Toast";
 
-export default function index({ auth, tasks, queryParams }) {
+export default function index({ auth, tasks, queryParams, message }) {
   return (
     <div>
+      {message && <Toast type={"success"} message={message} />}
+
       <Authenticatedlayout
         user={auth.user}
         header={
@@ -15,7 +18,7 @@ export default function index({ auth, tasks, queryParams }) {
             </h2>
             <Link
               href={route("task.create")}
-              className="bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600"
+              className="bg-emerald-500 py-1 text-sm px-3 text-white rounded shadow transition-all hover:bg-emerald-600"
             >
               Add Task
             </Link>
@@ -30,6 +33,7 @@ export default function index({ auth, tasks, queryParams }) {
               <div className="p-6 text-gray-900 dark:text-gray-100 ">
                 <TaskTable
                   tasks={tasks}
+                  message={message}
                   queryParams={queryParams}
                   hideProjectCol={false}
                 />

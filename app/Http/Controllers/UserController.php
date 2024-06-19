@@ -112,6 +112,6 @@ class UserController extends Controller
     {
         $user->delete();
         return to_route('user.index')
-            ->with('message', "Project was deleted");
+            ->with('message', "User was deleted");
     }
 }

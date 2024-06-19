@@ -1,21 +1,24 @@
 import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/16/solid";
 import React, { useEffect, useState } from "react";
 
-export default function Toast({ message, type, show = false }) {
-  const [showToast, setShowToast] = useState(show);
+export default function Toast({ message, type }) {
+  const [showToast, setShowToast] = useState(false);
 
   useEffect(() => {
-    if (show) {
-      const timeout = setTimeout(() => {
+    if (message) {
+      setShowToast(true);
+
+      const timer = setTimeout(() => {
         setShowToast(false);
       }, 3000);
 
-      return () => clearTimeout(timeout);
+      return () => clearTimeout(timer);
+    } else {
     }
-  }, [show]);
+  }, [message]);
   return (
     <div>
-      {message && showToast && (
+      {showToast && (
         <div
           className={
             "absolute right-2 bottom-2 top- p-3 inline-block text-xs text-white rounded transition ease-in-out " +

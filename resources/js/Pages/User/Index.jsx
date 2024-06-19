@@ -68,7 +68,7 @@ export default function index({ auth, users, queryParams = null, message }) {
       >
         <Head title="Users" />
 
-        {message && <Toast message={message} type={"success"} show={message} />}
+        {message && <Toast message={message} type={"success"} />}
 
         <div className="py-12">
           <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">

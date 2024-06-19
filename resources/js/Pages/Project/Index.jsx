@@ -11,6 +11,8 @@ import Toast from "@/Components/Toast";
 export default function index({ auth, projects, queryParams = null, message }) {
   queryParams = queryParams || {};
 
+  console.log(message);
+
   const searchField = (name, value) => {
     if (value) {
       queryParams[name] = value;
@@ -70,7 +72,7 @@ export default function index({ auth, projects, queryParams = null, message }) {
       >
         <Head title="Projects" />
 
-        {message && <Toast message={message} type={"success"} show={message} />}
+        {message && <Toast message={message} type={"success"} />}
 
         <div className="py-12">
           <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">

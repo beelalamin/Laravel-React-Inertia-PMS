@@ -5,6 +5,7 @@ import Pagination from "./Pagination";
 import SelectInput from "./SelectInput";
 import TextInput from "./TextInput";
 import { TASK_STATUS_CLASS_MAP, TASK_STATUS_TEXT_MAP } from "../Pages/Constant";
+import Toast from "./Toast";
 
 export default function TaskTable({
   tasks,
@@ -105,16 +106,16 @@ export default function TaskTable({
             <tr className="border-gray-500">
               <th className="px-3 py-2"></th>
               <th className="px-3 py-2 w-10"></th>
-              <th className="px-3 py-2 w-10"></th>
               <th className="px-3 py-2">
                 <TextInput
                   className="w-full text-xs"
                   defaultValue={queryParams.name}
-                  placeholder="Search by task Title"
+                  placeholder="Search by name"
                   onBlur={(e) => searchField("name", e.target.value)}
                   onKeyPress={(e) => onKeyPress("name", e)}
                 />
               </th>
+              <th className="px-3 py-2 w-10"></th>
               <th className="px-3 py-2">
                 <SelectInput
                   className="w-full text-xs"
@@ -145,7 +146,9 @@ export default function TaskTable({
                   <td className="px-3 py-2">
                     <img src={task.image_path} alt="" />
                   </td>
-                  <td className="px-3 py-2 text-wrap w-80">{task.name}</td>
+                  <td className="px-3 py-2 text-wrap w-80 hover:underline hover:text-gray-300">
+                    <Link href={route("task.show", task.id)}>{task.name}</Link>
+                  </td>
                   {!hideProjectCol && (
                     <td className="px-3 py-2 text-wrap w-80">
                       {task.project.name}

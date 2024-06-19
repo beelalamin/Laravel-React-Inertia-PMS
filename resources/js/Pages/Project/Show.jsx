@@ -87,6 +87,7 @@ export default function Show({ auth, success, project, tasks, queryParams }) {
         </div>
       </div>
 
+ 
       <div className="pb-12">
         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
           <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">

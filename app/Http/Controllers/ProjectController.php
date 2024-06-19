@@ -142,11 +142,18 @@ class ProjectController extends Controller
      */
     public function destroy(Project $project)
     {
-        $name = $project->name;
+        $relatedTasks = $project->tasks();
+
+        if ($relatedTasks) {
+            $relatedTasks->delete();
+        }
+
         $project->delete();
         if ($project->image_path) {
             Storage::disk('public')->deleteDirectory(dirname($project->image_path));
         }
+
+
         return to_route('project.index')
             ->with('message', "Project was deleted");
     }
