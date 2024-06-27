@@ -19,8 +19,11 @@ class OauthController extends Controller
         try {
 
             $socialUser = Socialite::driver($provider)->user();
-            if (User::where('email', $socialUser->email)->exists()) {
-                return  redirect('/login')->with('errorMessage', 'Email uses different method to login.');
+
+
+            // Check if the email exists and the provider_id is null
+            if (User::where('email', $socialUser->email)->exists() && User::where('email', $socialUser->email)->whereNull('provider_id')->exists()) {
+                return redirect('/login')->with('errorMessage', 'Email uses different method to login.');
             }
 
             $user = User::where([
@@ -37,8 +40,6 @@ class OauthController extends Controller
                     'provider_id' => $socialUser->id,
                     'provider_token' => $socialUser->token,
                     'email_verified_at' => now(),
-
-
                 ]);
             }
 
