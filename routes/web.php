@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\OauthController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TaskController;
@@ -37,5 +38,13 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+// Route::middleware(['cors'])->group(function () {
+// });
+
+Route::get('/auth/{provider}/redirect', [OauthController::class, 'redirect']);
+Route::get('/auth/{provider}/callback', [OauthController::class, 'callback']);
+
+
 
 require __DIR__ . '/auth.php';
