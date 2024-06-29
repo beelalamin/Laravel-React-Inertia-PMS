@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -29,11 +30,19 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
-        $request->authenticate();
+        $email = $request->input('email');
 
-        $request->session()->regenerate();
+        $oAuthUser = User::where('email', $email)->first()->provider_id;
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        if ($oAuthUser === null) {
+
+            $request->authenticate();
+            $request->session()->regenerate();
+            return redirect()->intended(route('dashboard', absolute: false));
+
+        } else {
+            return redirect('/login')->with('errorMessage', 'Email uses different method to login.');
+        }
     }
 
     /**
