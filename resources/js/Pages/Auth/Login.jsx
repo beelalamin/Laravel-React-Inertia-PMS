@@ -141,6 +141,19 @@ export default function Login({ status, canResetPassword, errorMessage }) {
           </PrimaryButton>
         </div>
       </form>
+
+      <hr className="my-4 border-gray-200 dark:border-gray-700" />
+
+      {/* Register Page */}
+      <span className="text-sm text-gray-600 dark:text-gray-400 flex justify-center">
+        New Here? &nbsp;
+        <Link
+          href={route("register")}
+          className="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
+        >
+          Register an account
+        </Link>
+      </span>
     </GuestLayout>
   );
 }
