@@ -34,7 +34,7 @@ jobs:
           script_stop: true
           script: |
             cd domains
-            cd laravel-space.com
+            cd swesor.com
             git pull
             php composer.phar install
             php artisan migrate --force
